@@ -53,4 +53,7 @@ I was now happy overall with the design, and I brought the two models together i
 
 Today was a great learning experience in Fusion and it was a good opportunity to practice my CAD skills.
 
+<img width="970" height="656" alt="img" src="https://github.com/user-attachments/assets/a14dd543-3f94-4b3a-8704-4e0a269f45f3" />
+
+
 *Time spent: 5h*

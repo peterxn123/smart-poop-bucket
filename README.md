@@ -3,6 +3,10 @@ Smart 3D printer poop bucket suitable for the Bambu A1. Track your poop with the
 
 Why did I create this? Well, simply put, I hate the waste produced by multicolour prints. I like to minimise my waste when printing, and also when I sell my multicolour prints I need to calculate the price by including the weight of the poop and the printed objects. So, I thought it would be really handy, rather than me having to empty my poop bin and weigh it myself every time, instead have a smart poop bin where I can keep track of the poop weight of each print, without having to go through the hassle of weighing it myself.
 
+<img width="776" height="581" alt="image" src="https://github.com/user-attachments/assets/6c5cdaee-a8d4-4fe8-ae9d-04b7a8a23517" />
+
+<img width="710" height="566" alt="image" src="https://github.com/user-attachments/assets/7649f82e-fafe-42af-ba1e-b64330573749" />
+
 
 ```
 

@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Poop Bin Dashboard</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 { color: #ffd369; }
+    button {
+      margin: 10px;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border: none;
+      background-color: #ff6f61;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>3D Printer Poop Bin Dashboard</h1>
+  <button onclick="fetch('/start')">Start New Print</button>
+  <button onclick="fetch('/end')">End Print</button>
+  <button onclick="fetch('/clear')">Clear History</button>
+  <h2>Print History</h2>
+  <table id="history-table">
+    <thead>
+      <tr><th>#</th><th>Delta</th><th>Start</th><th>End</th><th>Time</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    function fetchHistory() {
+      fetch('/data').then(res => res.json()).then(data => {
+        const tbody = document.querySelector('#history-table tbody');
+        tbody.innerHTML = '';
+        data.forEach((item, i) => {
+          const row = `<tr>
+            <td>${i + 1}</td>
+            <td>${item.delta}</td>
+            <td>${item.start}</td>
+            <td>${item.end}</td>
+            <td>${new Date(item.timestamp * 1000).toLocaleString()}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      });
+    }
+    setInterval(fetchHistory, 3000);
+    fetchHistory();
+  </script>
+</body>
+</html>

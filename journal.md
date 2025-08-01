@@ -12,6 +12,8 @@ Then, for weighing the poop, I knew I needed a load cell, as I remembered resear
 
 So there it was, my parts were decided and I was ready to go. I was excited for what was to come next.
 
+*Time spent: 3h*
+
 <img width="1259" height="707" alt="image" src="https://github.com/user-attachments/assets/4ab2e882-c156-4e58-9408-ef54fdcccbc5" />
 
 

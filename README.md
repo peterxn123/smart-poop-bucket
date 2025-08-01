@@ -41,6 +41,9 @@ Wiring diagram:
              │ Green ───────► A- (HX711)                    │
              └──────────────────────────────────────────────┘
 
+```
+
+
 BOM:
 
 | Quantity | Component                            | Model / Description                                         | Amazon UK Link                                                                                                                        | Notes                                     |
@@ -50,5 +53,3 @@ BOM:
 | 40       | Jumper Wires (male–female)           | Dupont jumper wires set                                     | [Link to Jumper Wires](https://www.amazon.co.uk/40pcs-Dupont-Female-Jumper-Connectors/dp/B013EW65H2/ref=sr_1_28)                         | To connect load cell and HX711 to XIAO   |
 
 
-
-```

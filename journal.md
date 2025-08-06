@@ -1,5 +1,7 @@
 **Smart Poop Bucket**
 
+Total time spent: 12h
+
 *July 29th - Made a start*
 
 For my highway project, I wanted to solve a real problem in my life. So I thought about it properly. I spent a while going around my house looking and thinking about things that I could solve with a hardware project. Then it hit me. What if I could help solve the bane of my existence as someone who 3D prints a lot - the piles of poop which I have to weigh every time I finish a print, if I want to sell it?
@@ -29,3 +31,29 @@ In the end, after much tinkering and consultation with both AI and a friend I cr
 <img width="912" height="792" alt="image" src="https://github.com/user-attachments/assets/1bd8fbd7-5f41-4507-968e-35d2d4a0e002" />
 
 *Time spent: 4h*
+
+*July 31st - CAD and polish*
+
+Finished my project today. I knew I had to get a quick start on the CAD as the highway deadline was coming up. I knew the best way to approach this would be to find a reference poop bucket design to use for my dimensions and to ensure that my own poop bucket is accurately sized. I found a design by Encrust3D on Makerworld called 'Slim A1 poop bucket'. I knew this was perfect as it had loads of positive reviews as fitting perfectly for the A1, and this is exactly what I wanted to use this poop bucket with my Bambu A1. 
+
+So I imported the file into Fusion 360 and took some measurements. The length was 180mm, width 80mm and height 110mm. There was a cutout in the corner of 50x40mm, to make the bucket fit around the printer. 
+
+I jumped into Fusion again, creating another file and started my sketch. I used similar dimensions, so that my bucked would fit just as well. I then extruded upwards, 20mm, then hollowed it out, by 16mm, leaving a 5mm gap on the edges. I then added the walls upwards to 110mm, to catch any flying poop and then added fillets, to make the look of the bucket better.
+I decided to add a bit of flair to my design by adding a poop inset and the words 'Le poop' on the side.
+
+This was just the bucket, however. I still needed to create the electronics enclosure housing the strain gauge that this bucket would sit on. I decide to make it the same dimensions as the bucket, to give it a seamless look. 
+
+I then had to think about how to ensure that the strain guage could properly capture the buckets weight. I decided to add some holes inset into the base and matching dimples on the bucket which would slot in, to ensure the bucket stayed in place in one place, so the strain guage could stay well calibrated.
+
+I then imported 3D models for all my electronics, placing in the HX711 and ESP32. I positioned them both and then created the cutout for the USB C ports.
+
+Then, I extruded upwards and placed the imported strain guage down. I ensured that there was a gap under the part of the strain guage that measures weight, to ensure proper functionality. I adjusted the height of the strain guage until it was just sticking out of the case so it could touch the bucket.
+
+I was now happy overall with the design, and I brought the two models together in Fusion and they matched perfectly. 
+
+Today was a great learning experience in Fusion and it was a good opportunity to practice my CAD skills.
+
+<img width="970" height="656" alt="img" src="https://github.com/user-attachments/assets/a14dd543-3f94-4b3a-8704-4e0a269f45f3" />
+
+
+*Time spent: 5h*

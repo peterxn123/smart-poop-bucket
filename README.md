@@ -9,6 +9,7 @@ Why did I create this? Well, simply put, I hate the waste produced by multicolou
 
 <img width="432" height="217" alt="image" src="https://github.com/user-attachments/assets/ff7ab3db-a163-45bd-bd49-c3ccc98c8d29" />
 
+<img width="556" height="254" alt="image" src="https://github.com/user-attachments/assets/e494c5bc-4fcf-4ee6-b7b1-925b1df8134d" />
 
 
 ```

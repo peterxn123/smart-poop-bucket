@@ -1,71 +1,489 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Poop Bin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Printer Chest Control</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Minecraft:wght@400;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: sans-serif;
-      background-color: #1e1e1e;
-      color: #f0f0f0;
+      font-family: 'Minecraft', Arial, sans-serif;
+      background: #3d2914;
+      background-image:
+              linear-gradient(90deg, rgba(139, 69, 19, 0.1) 50%, transparent 50%),
+              linear-gradient(rgba(101, 67, 33, 0.1) 50%, transparent 50%);
+      background-size: 20px 20px;
+      color: #f4e4bc;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Simple header */
+    .header {
       text-align: center;
-      padding: 2rem;
-    }
-    h1 { color: #ffd369; }
-    button {
-      margin: 10px;
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      border: none;
-      background-color: #ff6f61;
-      color: white;
+      margin-bottom: 30px;
+      background: #8b4513;
+      border: 3px solid #654321;
       border-radius: 8px;
-      cursor: pointer;
+      padding: 25px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
+
+    /* Little golden latch - kept simple */
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 12px;
+      background: #cdaa3d;
+      border: 1px solid #8b7355;
+      border-radius: 4px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #cdaa3d;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #d4af37;
+      opacity: 0.8;
+    }
+
+    /* Control buttons - more basic */
+    .controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 15px 25px;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: bold;
+      border: 2px solid;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+      min-width: 140px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-start {
+      background: #4caf50;
+      border-color: #388e3c;
+    }
+
+    .btn-end {
+      background: #f44336;
+      border-color: #c62828;
+    }
+
+    .btn-clear {
+      background: #ff9800;
+      border-color: #f57c00;
+    }
+
+    /* Status bar - simpler */
+    .status {
+      background: #8b4513;
+      border: 2px solid #654321;
+      border-radius: 6px;
+      padding: 15px 20px;
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #4caf50;
+      border-radius: 2px;
+      box-shadow: 0 0 6px rgba(76, 175, 80, 0.6);
+    }
+
+    /* Main table area */
+    .table-section {
+      background: #8b4513;
+      border: 3px solid #654321;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Simple chest hinges */
+    .table-section::before,
+    .table-section::after {
+      content: '';
+      position: absolute;
+      top: 15px;
+      width: 15px;
+      height: 30px;
+      background: #cdaa3d;
+      border: 1px solid #8b7355;
+      border-radius: 3px;
+    }
+
+    .table-section::before { left: 15px; }
+    .table-section::after { right: 15px; }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-top: 5px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      color: #cdaa3d;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .refresh-btn {
+      background: #654321;
+      border: 2px solid #5d4037;
+      color: #f4e4bc;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+
+    .refresh-btn:hover {
+      background: #5d4037;
+    }
+
+    /* Table styling - cleaner */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 6px;
+      border: 2px solid #654321;
+    }
+
     table {
       width: 100%;
-      margin-top: 20px;
       border-collapse: collapse;
+      background: #3d2914;
+      font-size: 0.9rem;
     }
-    th, td {
-      border: 1px solid #444;
-      padding: 0.5rem;
+
+    th {
+      background: #654321;
+      color: #cdaa3d;
+      padding: 12px 10px;
+      font-weight: bold;
+      text-align: left;
+      border-bottom: 2px solid #5d4037;
+    }
+
+    th:not(:last-child) {
+      border-right: 1px solid #5d4037;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #654321;
+      border-right: 1px solid #654321;
+      background: rgba(61, 41, 20, 0.8);
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    tr:hover td {
+      background: rgba(139, 69, 19, 0.4);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Simple code styling */
+    code {
+      background: rgba(0,0,0,0.4);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: #4caf50;
+    }
+
+    /* Basic loading spinner */
+    .loading {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(244, 228, 188, 0.3);
+      border-top-color: #cdaa3d;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #8b7355;
+    }
+
+    /* Simple notifications */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      border-radius: 4px;
+      color: white;
+      font-weight: bold;
+      z-index: 1000;
+      transform: translateX(300px);
+      transition: transform 0.3s;
+      border: 2px solid;
+    }
+
+    .notification.success {
+      background: #4caf50;
+      border-color: #388e3c;
+    }
+
+    .notification.error {
+      background: #f44336;
+      border-color: #c62828;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      h1 { font-size: 1.8rem; }
+      .controls { flex-direction: column; align-items: center; }
+      .btn { width: 200px; }
+      .status { flex-direction: column; text-align: center; }
+      .table-header { flex-direction: column; gap: 10px; }
+    }
+
+    /* Disabled state */
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
     }
   </style>
 </head>
 <body>
-  <h1>3D Printer Poop Bin Dashboard</h1>
-  <button onclick="fetch('/start')">Start New Print</button>
-  <button onclick="fetch('/end')">End Print</button>
-  <button onclick="fetch('/clear')">Clear History</button>
-  <h2>Print History</h2>
-  <table id="history-table">
-    <thead>
-      <tr><th>#</th><th>Delta</th><th>Start</th><th>End</th><th>Time</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Your Poop Bin</h1>
+    <p class="subtitle">Use your smart poop bin to measure the exact weight of poop produced by each print.</p>
+  </div>
 
-  <script>
-    function fetchHistory() {
-      fetch('/data').then(res => res.json()).then(data => {
-        const tbody = document.querySelector('#history-table tbody');
+  <!-- Status -->
+  <div class="status">
+    <div class="status-item">
+      <div class="status-dot"></div>
+      <span>System Online</span>
+    </div>
+    <div class="status-item">
+      <span id="total-prints">Total Prints: <strong>0</strong></span>
+    </div>
+    <div class="status-item">
+      <span id="last-updated">Last Updated: <span class="loading"></span></span>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn btn-start" onclick="handleAction('/start', 'Starting new print...')">
+      Start Print
+    </button>
+    <button class="btn btn-end" onclick="handleAction('/end', 'Ending current print...')">
+      End Print
+    </button>
+    <button class="btn btn-clear" onclick="handleAction('/clear', 'Clearing history...')">
+      Clear History
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-section">
+    <div class="table-header">
+      <h2>Print History</h2>
+      <button class="refresh-btn" onclick="fetchHistory()">
+        <span id="refresh-icon">🔄</span> Refresh
+      </button>
+    </div>
+
+    <div class="table-container">
+      <table id="history-table">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Delta</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Timestamp</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Simple fetch history function
+  async function fetchHistory() {
+    const refreshIcon = document.getElementById('refresh-icon');
+    const lastUpdated = document.getElementById('last-updated');
+    const totalPrints = document.getElementById('total-prints');
+
+    refreshIcon.innerHTML = '<span class="loading"></span>';
+
+    try {
+      const response = await fetch('/data');
+      const data = await response.json();
+
+      const tbody = document.querySelector('#history-table tbody');
+
+      if (data.length === 0) {
+        tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                No print history yet<br>
+                                <small>Start a print to see data here</small>
+                            </td>
+                        </tr>
+                    `;
+      } else {
         tbody.innerHTML = '';
         data.forEach((item, i) => {
-          const row = `<tr>
-            <td>${i + 1}</td>
-            <td>${item.delta}</td>
-            <td>${item.start}</td>
-            <td>${item.end}</td>
-            <td>${new Date(item.timestamp * 1000).toLocaleString()}</td>
-          </tr>`;
-          tbody.innerHTML += row;
+          const row = document.createElement('tr');
+          row.innerHTML = `
+                            <td><strong>${i + 1}</strong></td>
+                            <td><code>${item.delta || 'N/A'}</code></td>
+                            <td>${item.start || 'N/A'}</td>
+                            <td>${item.end || 'N/A'}</td>
+                            <td>${item.timestamp ? new Date(item.timestamp * 1000).toLocaleString() : 'N/A'}</td>
+                        `;
+          tbody.appendChild(row);
         });
-      });
+      }
+
+      totalPrints.innerHTML = `Total Prints: <strong>${data.length}</strong>`;
+      lastUpdated.innerHTML = `Last Updated: <strong>${new Date().toLocaleTimeString()}</strong>`;
+
+    } catch (error) {
+      console.error('Error:', error);
+      const tbody = document.querySelector('#history-table tbody');
+      tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #f44336; padding: 20px;">
+                            Error loading data
+                        </td>
+                    </tr>
+                `;
+      lastUpdated.innerHTML = `Last Updated: <span style="color: #f44336;">Error</span>`;
     }
-    setInterval(fetchHistory, 3000);
-    fetchHistory();
-  </script>
+
+    setTimeout(() => {
+      refreshIcon.innerHTML = '';
+    }, 800);
+  }
+
+  // Simple action handler
+  async function handleAction(endpoint, message) {
+    const buttons = document.querySelectorAll('.btn');
+
+    buttons.forEach(btn => btn.disabled = true);
+
+    try {
+      await fetch(endpoint);
+      showNotification(`✅ ${message}`, 'success');
+      setTimeout(fetchHistory, 400);
+    } catch (error) {
+      console.error('Action failed:', error);
+      showNotification(`❌ Action failed`, 'error');
+    }
+
+    setTimeout(() => {
+      buttons.forEach(btn => btn.disabled = false);
+    }, 1000);
+  }
+
+  // Simple notification
+  function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.transform = 'translateX(0)';
+    }, 100);
+
+    setTimeout(() => {
+      notification.style.transform = 'translateX(300px)';
+      setTimeout(() => {
+        if (document.body.contains(notification)) {
+          document.body.removeChild(notification);
+        }
+      }, 300);
+    }, 2500);
+  }
+
+  // Initialize
+  fetchHistory();
+  setInterval(fetchHistory, 30000); // refresh every 30 seconds
+</script>
 </body>
 </html>

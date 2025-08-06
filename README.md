@@ -17,6 +17,14 @@ Why did I create this? Well, simply put, I hate the waste produced by multicolou
 
 <img width="556" height="254" alt="image" src="https://github.com/user-attachments/assets/e494c5bc-4fcf-4ee6-b7b1-925b1df8134d" />
 
+**Bottom side of the base:**
+
+<img width="343" height="344" alt="image" src="https://github.com/user-attachments/assets/78a72509-0299-4e2b-9557-bb75767f3fcf" />
+
+**The chest and the base together:**
+
+<img width="262" height="331" alt="image" src="https://github.com/user-attachments/assets/cd023d5d-0372-4005-b1b3-f0bdab65734b" />
+
 
 ```
 

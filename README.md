@@ -31,10 +31,10 @@ Why did I create this? Well, simply put, I hate the waste produced by multicolou
 Wiring diagram:
 
              ┌──────────────────────────────────────────────┐
-             │                 Xiao ESP32-S3                │
+             │                 Generic ESP32-S3             │
              │                                              │
-             │ GPIO2 ────────► DT (HX711)                   │
-             │ GPIO3 ────────► SCK (HX711)                  │
+             │ GPIO16 ────────► DT (HX711)                  │
+             │ GPIO17 ────────► SCK (HX711)                 │
              │ 3V3   ────────► VCC (HX711)                  │
              │ GND   ────────► GND (HX711)                  │
              └──────────────────────────────────────────────┘

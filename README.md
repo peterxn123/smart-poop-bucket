@@ -1,4 +1,9 @@
 # smart-poop-bucket
+
+Physical build:
+
+![IMG_7241](https://github.com/user-attachments/assets/ec8b2981-2d34-4768-ab0d-ff2e8b9a50e1)
+
 Smart 3D printer poop bucket suitable for the Bambu A1. Track your poop with the web interface. Uses a Xiao ESP32-S3, HX711 and a 50kg load cell. This very handy tool makes it easier to manage your (printer) poop, by allowing you to monitor live your poop grammage for each print. As I'm sure you know, the slicer's estimate is only just that - an estimate - and so when it is important to know the total filament usage, for example when calculating the cost of a 3D print to sell, this handy tool allows you to see the exact weight of poop output by the printer per print. Uses the public HX711 micropython lib, so this project is therefore shared under an MIT license.
 
 Why did I create this? Well, simply put, I hate the waste produced by multicolour prints. I like to minimise my waste when printing, and also when I sell my multicolour prints I need to calculate the price by including the weight of the poop and the printed objects. So, I thought it would be really handy, rather than me having to empty my poop bin and weigh it myself every time, instead have a smart poop bin where I can keep track of the poop weight of each print, without having to go through the hassle of weighing it myself. This should make selling 3D prints easier for anyone who uses the AMS lite system with their A1.

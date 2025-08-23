@@ -114,7 +114,17 @@
       border-color: #f57c00;
     }
 
-    /* Status bar - simpler */
+    .btn-tare {
+      background: #2196f3;
+      border-color: #1565c0;
+    }
+
+    .btn-calibrate {
+      background: #cdaa3d;
+      border-color: #8b7355;
+      color: #654321;
+    }
+
     .status {
       background: #8b4513;
       border: 2px solid #654321;
@@ -317,17 +327,95 @@
       cursor: not-allowed;
       transform: none !important;
     }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(61,41,20,0.85);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: #8b4513;
+      border: 3px solid #cdaa3d;
+      border-radius: 10px;
+      padding: 30px 25px 20px 25px;
+      color: #f4e4bc;
+      max-width: 400px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      position: relative;
+      text-align: center;
+    }
+    .modal-content h3 {
+      color: #cdaa3d;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      text-shadow: 1px 1px 2px #654321;
+    }
+    .modal-content label {
+      display: block;
+      margin: 18px 0 8px 0;
+      color: #d4af37;
+      font-weight: bold;
+    }
+    .modal-content input[type="number"] {
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: 2px solid #cdaa3d;
+      background: #3d2914;
+      color: #cdaa3d;
+      font-size: 1rem;
+      width: 80%;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .modal-content .modal-btn {
+      background: #cdaa3d;
+      color: #654321;
+      border: 2px solid #8b7355;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 10px 5px 0 5px;
+      transition: background 0.2s;
+    }
+    .modal-content .modal-btn:hover { background: #d4af37; }
+    .modal-close {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 1.3rem;
+      color: #cdaa3d;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .modal-content .modal-instructions {
+      background: #654321;
+      color: #f4e4bc;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+
   </style>
 </head>
 <body>
 <div class="container">
-  <!-- Header -->
   <div class="header">
     <h1>Your Poop Bin</h1>
     <p class="subtitle">Use your smart poop bin to measure the exact weight of poop produced by each print.</p>
   </div>
 
-  <!-- Status -->
+
   <div class="status">
     <div class="status-item">
       <div class="status-dot"></div>
@@ -341,20 +429,24 @@
     </div>
   </div>
 
-  <!-- Controls -->
   <div class="controls">
-    <button class="btn btn-start" onclick="handleAction('/start', 'Starting new print...')">
+    <button class="btn btn-start" onclick="handleStartPrint()">
       Start Print
     </button>
-    <button class="btn btn-end" onclick="handleAction('/end', 'Ending current print...')">
+    <button class="btn btn-end" onclick="handleEndPrint()">
       End Print
     </button>
-    <button class="btn btn-clear" onclick="handleAction('/clear', 'Clearing history...')">
+    <button class="btn btn-clear" onclick="handleClearHistory()">
       Clear History
     </button>
+    <button class="btn btn-tare" onclick="handleTare()">
+      Tare
+    </button>
+    <button class="btn btn-calibrate" onclick="openCalibrateModal()">
+      Calibrate
+    </button>
   </div>
-
-  <!-- Table -->
+  
   <div class="table-section">
     <div class="table-header">
       <h2>Print History</h2>
@@ -380,8 +472,30 @@
   </div>
 </div>
 
+
+<div class="modal" id="calibrate-modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeCalibrateModal()">&times;</button>
+    <h3>Calibration Instructions</h3>
+    <div class="modal-instructions">
+      <ol>
+        <li>Remove all objects from the scale and press <strong>Tare</strong>.</li>
+        <li>Place a known weight (e.g. <strong>500g</strong> or <strong>1000g</strong>) on the scale.</li>
+        <li>Enter the weight below and press <strong>Calibrate</strong>.</li>
+        <li>Wait for confirmation. Your scale is now calibrated!</li>
+      </ol>
+    </div>
+    <label for="calibrate-weight">Known Weight (g):</label>
+    <input type="number" id="calibrate-weight" min="1" max="5000" step="1" placeholder="e.g. 500 or 1000">
+    <br>
+    <button class="modal-btn" onclick="submitCalibration()">Calibrate</button>
+  </div>
+</div>
+
 <script>
-  // Simple fetch history function
+  // Update with your API host - this is the IP or hostname of your ESP32
+  const API_HOST = 'YOUR_ESP32_IP_OR_HOSTNAME_HERE';
+
   async function fetchHistory() {
     const refreshIcon = document.getElementById('refresh-icon');
     const lastUpdated = document.getElementById('last-updated');
@@ -390,31 +504,31 @@
     refreshIcon.innerHTML = '<span class="loading"></span>';
 
     try {
-      const response = await fetch('/data');
+      const response = await fetch(`${API_HOST}/data`);
       const data = await response.json();
 
       const tbody = document.querySelector('#history-table tbody');
 
       if (data.length === 0) {
         tbody.innerHTML = `
-                        <tr>
-                            <td colspan="5" class="empty-state">
-                                No print history yet<br>
-                                <small>Start a print to see data here</small>
-                            </td>
-                        </tr>
-                    `;
+        <tr>
+          <td colspan="5" class="empty-state">
+            No print history yet<br>
+            <small>Start a print to see data here</small>
+          </td>
+        </tr>
+      `;
       } else {
         tbody.innerHTML = '';
         data.forEach((item, i) => {
           const row = document.createElement('tr');
           row.innerHTML = `
-                            <td><strong>${i + 1}</strong></td>
-                            <td><code>${item.delta || 'N/A'}</code></td>
-                            <td>${item.start || 'N/A'}</td>
-                            <td>${item.end || 'N/A'}</td>
-                            <td>${item.timestamp ? new Date(item.timestamp * 1000).toLocaleString() : 'N/A'}</td>
-                        `;
+          <td><strong>${i + 1}</strong></td>
+          <td><code>${item.delta || 'N/A'}</code></td>
+          <td>${item.start || 'N/A'}</td>
+          <td>${item.end || 'N/A'}</td>
+          <td>${item.timestamp ? new Date(item.timestamp * 1000).toLocaleString() : 'N/A'}</td>
+        `;
           tbody.appendChild(row);
         });
       }
@@ -426,12 +540,12 @@
       console.error('Error:', error);
       const tbody = document.querySelector('#history-table tbody');
       tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" style="text-align: center; color: #f44336; padding: 20px;">
-                            Error loading data
-                        </td>
-                    </tr>
-                `;
+      <tr>
+        <td colspan="5" style="text-align: center; color: #f44336; padding: 20px;">
+          Error loading data
+        </td>
+      </tr>
+    `;
       lastUpdated.innerHTML = `Last Updated: <span style="color: #f44336;">Error</span>`;
     }
 
@@ -440,14 +554,12 @@
     }, 800);
   }
 
-  // Simple action handler
   async function handleAction(endpoint, message) {
     const buttons = document.querySelectorAll('.btn');
-
     buttons.forEach(btn => btn.disabled = true);
 
     try {
-      await fetch(endpoint);
+      await fetch(`${API_HOST}${endpoint}`);
       showNotification(`✅ ${message}`, 'success');
       setTimeout(fetchHistory, 400);
     } catch (error) {
@@ -459,6 +571,7 @@
       buttons.forEach(btn => btn.disabled = false);
     }, 1000);
   }
+
 
   // Simple notification
   function showNotification(message, type) {
@@ -480,6 +593,45 @@
       }, 300);
     }, 2500);
   }
+
+  async function handleTare() {
+    handleAction('/tare', 'Taring scale...');
+  }
+
+  function openCalibrateModal() {
+    document.getElementById('calibrate-modal').classList.add('active');
+    document.getElementById('calibrate-weight').value = '';
+  }
+
+  function closeCalibrateModal() {
+    document.getElementById('calibrate-modal').classList.remove('active');
+  }
+
+  async function submitCalibration() {
+    const weightInput = document.getElementById('calibrate-weight');
+    const weight = parseInt(weightInput.value, 10);
+    if (!weight || weight < 1) {
+      showNotification('❌ Enter a valid weight (e.g. 500 or 1000)', 'error');
+      return;
+    }
+    closeCalibrateModal();
+    try {
+      await fetch(`${API_HOST}/calibrate?w=${weight}`);
+      showNotification(`✅ Calibration sent (${weight}g)`, 'success');
+      setTimeout(fetchHistory, 600);
+    } catch (error) {
+      showNotification('❌ Calibration failed', 'error');
+    }
+  }
+
+  function handleStartPrint() {
+    handleAction('/start', 'Print started!');
+  }
+
+  function handleEndPrint() {
+    handleAction('/end', 'Print ended!');
+  }
+
 
   // Initialize
   fetchHistory();

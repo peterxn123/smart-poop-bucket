@@ -84,3 +84,12 @@ I then moved from the schematic editor to the PCB editor, where I first placed d
 <img width="864" height="433" alt="image" src="https://github.com/user-attachments/assets/72e90c62-2d2d-4035-a67b-12f99e3fab49" />
 
 *Time spent: 6 hours*
+
+**Physical Build**
+
+*August 9th - Got the grant and ordered the parts so I can build it on holiday*
+
+Today, quite a few days after Kai approved my revised project, I received an email from Jonathan letting me know I would be receiving a grant in my email in a short while and - lo and behold - a couple minutes later I got an email from HCB giving me the details of my grant! But there was a problem... Tomorrow I am going on holiday to Turkey and the time that I received the grant meant that I wouldnt be able to order parts to my house and get them in time... So the only way to get my parts before the deadline is to order them to the resort and put my trust in the courier survices of Turkey. I've ordered them off Amazon - let's just wait and hope.
+
+<img width="500" height="229" alt="image" src="https://github.com/user-attachments/assets/6c022bd9-2485-458b-b44e-a28deb5bb013" />
+
